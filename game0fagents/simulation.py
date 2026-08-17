@@ -4,6 +4,12 @@ from dataclasses import asdict, dataclass, field
 from statistics import mean
 from typing import Any
 
+BASE_ENERGY_GAIN = 0.05
+QUORUM_ENERGY_GAIN = 0.2
+DAUGHTER_X_OFFSET = 6.0
+DAUGHTER_Y_OFFSET = 3.0
+CELL_MOVE_X_STEP = 1.5
+
 
 @dataclass
 class CellAgent:
@@ -88,7 +94,7 @@ class PygameRenderer:
 
     def render(self, cells: list[CellAgent]) -> dict[str, Any]:
         return {
-            "backend": "pygame",
+            "renderer": "pygame",
             "width": self.width,
             "height": self.height,
             "sprites": [
@@ -111,10 +117,18 @@ class NeuroSymbolicSimulation:
     tracer: LangfuseTracer = field(default_factory=LangfuseTracer)
     telemetry: ClickHouseTelemetry = field(default_factory=ClickHouseTelemetry)
     renderer: PygameRenderer = field(default_factory=PygameRenderer)
+    coordinator: LangGraphCoordinator = field(init=False)
     tick: int = 0
+
+    def __post_init__(self) -> None:
+        self.coordinator = LangGraphCoordinator(
+            quorum_threshold=self.quorum_threshold,
+            mitosis_threshold=self.mitosis_threshold,
+        )
 
     @classmethod
     def default(cls) -> "NeuroSymbolicSimulation":
+        """Create a seeded colony that exercises quorum sensing and mitosis."""
         return cls(
             cells=[
                 CellAgent("cell-0", x=40.0, y=60.0, energy=1.4, signal=0.85),
@@ -123,39 +137,45 @@ class NeuroSymbolicSimulation:
         )
 
     def step(self) -> SimulationSnapshot:
+        """Advance the colony by one tick and return its traceable state snapshot."""
         self.tick += 1
-        self.tracer.record("tick.start", {"tick": self.tick, "population": len(self.cells)})
+        tick_trace_names: list[str] = []
 
-        coordinator = LangGraphCoordinator(
-            quorum_threshold=self.quorum_threshold,
-            mitosis_threshold=self.mitosis_threshold,
-        )
-        coordination = coordinator.coordinate(self.cells)
-        self.tracer.record("langgraph.strategy", coordination)
+        def record_trace(name: str, payload: dict[str, Any]) -> None:
+            self.tracer.record(name, payload)
+            tick_trace_names.append(name)
+
+        record_trace("tick.start", {"tick": self.tick, "population": len(self.cells)})
+
+        coordination = self.coordinator.coordinate(self.cells)
+        record_trace("langgraph.strategy", coordination)
 
         updated_cells: list[CellAgent] = []
-        for index, cell in enumerate(self.cells):
+        for cell in self.cells:
             signal_delta = self._neural_signal_delta(cell, coordination["average_signal"])
             next_signal = min(1.0, cell.signal + signal_delta)
-            next_energy = cell.energy + (0.2 if coordination["quorum_reached"] else 0.05)
+            next_energy = cell.energy + (
+                QUORUM_ENERGY_GAIN if coordination["quorum_reached"] else BASE_ENERGY_GAIN
+            )
 
             if next_energy >= self.mitosis_threshold:
                 daughter_energy = round(next_energy / 2, 3)
+                sibling_energy = round(next_energy - daughter_energy, 3)
                 updated_cells.extend(
                     [
                         CellAgent(
                             identifier=f"{cell.identifier}-a{self.tick}",
-                            x=cell.x - 6,
-                            y=cell.y + index,
+                            x=cell.x - DAUGHTER_X_OFFSET,
+                            y=cell.y + DAUGHTER_Y_OFFSET,
                             energy=daughter_energy,
                             signal=round(next_signal * 0.92, 3),
                             generation=cell.generation + 1,
                         ),
                         CellAgent(
                             identifier=f"{cell.identifier}-b{self.tick}",
-                            x=cell.x + 6,
-                            y=cell.y - index,
-                            energy=daughter_energy,
+                            x=cell.x + DAUGHTER_X_OFFSET,
+                            y=cell.y - DAUGHTER_Y_OFFSET,
+                            energy=sibling_energy,
                             signal=round(next_signal * 0.88, 3),
                             generation=cell.generation + 1,
                         ),
@@ -165,7 +185,7 @@ class NeuroSymbolicSimulation:
                 updated_cells.append(
                     CellAgent(
                         identifier=cell.identifier,
-                        x=cell.x + 1.5,
+                        x=cell.x + CELL_MOVE_X_STEP,
                         y=cell.y,
                         energy=round(next_energy, 3),
                         signal=round(next_signal, 3),
@@ -182,11 +202,11 @@ class NeuroSymbolicSimulation:
                 "population": len(self.cells),
                 "average_signal": round(mean(cell.signal for cell in self.cells), 3),
                 "average_energy": round(mean(cell.energy for cell in self.cells), 3),
-                "renderer": render_state["backend"],
+                "renderer": render_state["renderer"],
             }
         )
-        self.tracer.record("clickhouse.telemetry", telemetry_event)
-        self.tracer.record("tick.complete", {"tick": self.tick, "population": len(self.cells)})
+        record_trace("clickhouse.telemetry", telemetry_event)
+        record_trace("tick.complete", {"tick": self.tick, "population": len(self.cells)})
 
         return SimulationSnapshot(
             tick=self.tick,
@@ -196,7 +216,7 @@ class NeuroSymbolicSimulation:
             average_signal=telemetry_event["average_signal"],
             average_energy=telemetry_event["average_energy"],
             telemetry_event=telemetry_event,
-            trace_event_names=self.tracer.names()[-4:],
+            trace_event_names=tick_trace_names,
         )
 
     @staticmethod

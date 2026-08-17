@@ -11,7 +11,11 @@ class NeuroSymbolicSimulationTests(unittest.TestCase):
 
         self.assertEqual(snapshot.strategy, "synchronize-growth")
         self.assertTrue(snapshot.quorum_reached)
-        self.assertEqual(snapshot.population, 3)
+        self.assertEqual(snapshot.population, len(simulation.cells))
+        self.assertEqual(
+            sorted(cell.identifier for cell in simulation.cells),
+            [f"cell-0-a{snapshot.tick}", f"cell-0-b{snapshot.tick}", "cell-1"],
+        )
 
     def test_step_emits_clickhouse_telemetry_and_langfuse_trace_events(self) -> None:
         simulation = NeuroSymbolicSimulation(
@@ -31,11 +35,13 @@ class NeuroSymbolicSimulationTests(unittest.TestCase):
         simulation = NeuroSymbolicSimulation(
             cells=[CellAgent("cell-z", x=12.0, y=15.0, energy=1.3, signal=0.7)]
         )
+        self.assertEqual(simulation.cells[0].generation, 0)
 
         simulation.step()
 
         self.assertEqual(len(simulation.cells), 2)
         self.assertNotEqual(simulation.cells[0].identifier, simulation.cells[1].identifier)
+        self.assertNotEqual(simulation.cells[0].y, simulation.cells[1].y)
         self.assertTrue(all(cell.generation == 1 for cell in simulation.cells))
 
 
