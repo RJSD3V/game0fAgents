@@ -1,8 +1,8 @@
 # 📖 REFERENCE.md: Biological Foundation & Scientific Validation
 ### 🎯 Project Framework: `game-of-agents`
-### 🧠 A Non-Biologist's Guide to Quorum Sensing, Cell Cycles, and Metabolic Regulation
+### 🧠 A Non-Biologist's Guide to Quorum Sensing, Cell Cycles, and Emergent Systems
 
-This document breaks down the software design rules of **The Symbiosis Engine** into clear, fundamental biological principles. If you only remember basic high school biology, this guide will update your knowledge and explain exactly why the project's logic is scientifically watertight.
+This document breaks down the software design rules of **The Symbiosis Engine** into fundamental biological principles. If you only remember basic high school biology, this guide will update your knowledge and explain why the project's logic is scientifically sound and highly simulation-worthy.
 
 ---
 
@@ -79,3 +79,18 @@ In a crowded biological ecosystem, high density transforms an environment from a
 ### 🔗 Recommended Reading
 * Learn how viruses spread rapidly through dense cell walls: [Bacteriophage](https://wikipedia.org)
 * Learn how cells structurally burst and disintegrate when damaged: [Lysis](https://wikipedia.org)
+
+---
+
+## 🎲 Rule 6: Emergent System Behavior (Simulation Worthiness)
+> **Software Logic:** Initial seeding layout, cellular lifespans, and infection rates are randomized. The system avoids fixed, deterministic outcomes.
+
+### The Real Science: Chaotic Adaptation and Macro Evolution
+Because individual cellular attributes operate on stochastic (randomized) variables, the simulation demonstrates **emergent complexity**—meaning simple local actions generate wildly unpredictable ecosystem states. Every time you run the simulation, it will self-organize into one of three distinct biological phenotypes:
+
+1. **The Symbiotic Equilibrium:** Both colonies expand evenly. The LangGraph signaling protocol successfully negotiates staggered division windows. Nutrients dynamically deplete and recover in a perfect balanced loop.
+2. **The Stagnant Deadlock:** An early, localized disease outbreak spikes resource drainage. The global ecosystem drops below the 250-unit threshold required for mitosis. The entire board enters chronic senescence and stops growing.
+3. **The Competitive Monopolisation:** One colony experiences an evolutionary "speed lottery" run. It hits its 40% capacity early, consumes the initial resource buffer via a LangGraph contract, and expands its physical footprint—starving out the rival colony via pure spatial exclusion.
+
+### 🔗 Recommended Reading
+* Learn how complex, unpredictable systems form from simple local parts: [Emergence](https://wikipedia.org)
