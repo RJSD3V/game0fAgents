@@ -1,43 +1,53 @@
 import pygame
-import sys
+from pygame import surfarray
 
+import sys
+from numpy import *
 
 
 pygame.init()
 
 # Color palette
 
-COLOR_BG= (20,24, 30)
-COLOR_GRID = (35,40,50)
+COLOR_BG= (0,0, 0)
+COLOR_GRID = (200,200,200)
 COLOR_CELL = (0, 180, 255)
 COLOR_FOOD = ( 0, 255, 130)
 
-WINDOW_WIDTH=1050
-WINDOW_HEIGHT=600
-
-screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-pygame.display.set_caption("The Symbiosis Engine: Cellular Growth Matrix")
-clock = pygame.time.Clock()
+WINDOW_WIDTH=2000
+WINDOW_HEIGHT=2000
 
 
-running = True
-while running: 
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-        screen.fill((20,24,30))
-
-        pygame.draw.rect(screen, (0, 180, 255), [100,100, 50, 50])
+def drawGrid():
+    blockSize = 25
+    for x in range(0, WINDOW_WIDTH, blockSize):
+        for y in range(0, WINDOW_HEIGHT, blockSize):
+            rect = pygame.Rect(x, y, blockSize, blockSize)
+            pygame.draw.rect(screen, COLOR_GRID, rect, 1)
 
 
-        pygame.display.flip()
+
+def main():
+    global screen, clock
+    running = True
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    pygame.display.set_caption("The Symbiosis Engine: Cellular Growth Matrix")
+    clock = pygame.time.Clock()
+    screen.fill(COLOR_BG)
+
+    while running: 
+        drawGrid()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+
+            pygame.display.flip()
 
 
         clock.tick(30)
 
 
-
-
+if __name__ == '__main__':
+    main()
 
