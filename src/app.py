@@ -2,8 +2,7 @@ import pygame
 from pygame import surfarray
 
 import sys
-from numpy import *
-
+import numpy as np
 
 pygame.init()
 
