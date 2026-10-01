@@ -1,3 +1,13 @@
+# Conway's Game of Life — Rules
+#
+# 1. BIRTH:      A dead cell with exactly 3 live neighbours becomes alive.
+# 2. SURVIVAL:   A live cell with 2 or 3 live neighbours stays alive.
+# 3. DEATH:      A live cell with fewer than 2 neighbours dies (underpopulation).
+# 4. DEATH:      A live cell with more than 3 neighbours dies (overcrowding).
+#
+# All cells are evaluated simultaneously against the SAME generation.
+# (Double buffering: read from the current board, write to a new one, then swap.)
+
 import numpy as np
 
 

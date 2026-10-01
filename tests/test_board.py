@@ -1,3 +1,20 @@
+# Conway's Game of Life — Test invariants
+#
+# Known fixtures (patterns with mathematically proven behaviour):
+#
+# BLOCK (still life):     ##      After any number of generations,
+#                         ##      the block is unchanged. Each cell has
+#                                 exactly 3 neighbours → all survive,
+#                                 no dead cell has exactly 3 → no births.
+#
+# BLINKER (period 2):    gen 0    gen 1    gen 2 (== gen 0)
+#                         ###      .#.      ###
+#                                  .#.
+#                                  .#.
+#
+# These are the two simplest Conway invariants. If either breaks,
+# the transition function is wrong.
+
 from board import Board, next_board
 import pytest
 

@@ -1,4 +1,4 @@
 .env
 .python-version
 sample/
-src/__pycache__/
+__pycache__/
