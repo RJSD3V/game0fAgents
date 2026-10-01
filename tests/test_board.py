@@ -17,6 +17,7 @@
 
 from board import Board, next_board
 import pytest
+import numpy as np
 
 
 @pytest.fixture
@@ -25,7 +26,7 @@ def board():
 
 def test_transposition():
     b = Board.from_size(10, 20)
-    with pytest.raises(IndexError):
+    with pytest.raises(ValueError):
         b.place(19, 9)
 
 def test_alive(board):
@@ -33,25 +34,21 @@ def test_alive(board):
     board.place(10, 10)
     assert board.is_alive(10,10)
 
-def test_blinker():
+def test_blinker(board):
     """ Test inline cells"""
-    b = Board.from_size(10,10)
-    b.place(5,5)
-    b = next_board(b)
-    b.show()
-    b.place(5,4)
-    b = next_board(b)
-    b.show()
-    b.place(5,3)
-    b = next_board(b)
-    b.show()
+    board.place(10,11)
+    board.place(10,12)
+    board.place(10,13)
+    x = next_board(board.grid)
+    assert not np.array_equal(board.grid,x)
+
 
 def test_negative_index(board):
     loc_x = -1
     loc_y = -1
-    assert  loc_x >= 0 and loc_y >= 0
-    board.place(loc_x, loc_y)
-    board.show()
+
+    with pytest.raises(ValueError):
+        board.place(-1,-1)
 
 
 

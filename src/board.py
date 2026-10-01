@@ -72,13 +72,13 @@ def next_board(grid: np.ndarray):
 
 def main():
     b = Board.from_size(10,10)
-    b.put_cell(5,5)
+    b.place(5,5)
     b.step()
     b.show()
-    b.put_cell(5,4)
+    b.place(5,4)
     b.step()
     b.show()
-    b.put_cell(5,3)
+    b.place(5,3)
     b.step()
     b.show()
     
