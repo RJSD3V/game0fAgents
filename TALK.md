@@ -21,15 +21,7 @@ different one. Neither is Conway.
 
 So you need the previous generation to stay intact until the whole new one is
 built. Read from one buffer, write to the other, then swap. That's
-**double buffering**, and it's the same mechanism as:
-
-- a graphics back buffer (never show a half-drawn frame)
-- immutable state in React/Redux (never render against a half-applied update)
-- copy-on-write snapshots in a database (readers see one consistent version)
-- git's object model (a commit is a complete tree, not a set of edits)
-
-**The unifying idea:** when *many* readers must agree on *one* version of the
-world, you don't edit the world — you build the next one beside it and switch.
+**double buffering**.
 
 **Demo.** Show the in-place version running. It looks plausible — cells live and
 die, patterns move. Then put a glider on it. The glider mutates or dies, because
@@ -62,9 +54,6 @@ never errors. Symmetry in a fixture hides any bug that is itself a symmetry.
 Same code on a 3×12: `IndexError` on the first call, six times out of six. The
 crash is the *good* outcome — the square board was lying.
 
-**Generalises to:** matrices, images (H×W vs W×H), dataframes, any API taking an
-`(a, b)` pair. Also: never test a date formatter on the 5th of May.
-
 ---
 
 ## A test with no assertions always passes
@@ -92,5 +81,77 @@ whole function to a single character.
 **Demo.** Live: the blinker's neighbour-count matrix (correct), after the birth
 mask (correct), after the survival mask (unchanged — found it).
 
-**Generalises to:** numpy chains, request middleware, ETL stages, build
-pipelines, git bisect itself.
+---
+
+## Slide plan: what a cell is, and how a CA represents it
+
+*Outline only — structure and facts. Wording on the slide is mine to write.*
+
+**Purpose.** One slide for an audience that knows code but not biology. Three
+jobs: what a cell is, how a cellular automaton maps onto one, and where the
+field came from. The slide carries one picture and ~3 short lines; the rest is
+spoken.
+
+**Layout.**
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  [title: my one-line framing]                            │
+│                                                          │
+│   A REAL CELL          ──maps to──>   A GRID CELL        │
+│   (image: bacterium)                  (image: 3×3 grid,  │
+│                                        centre + 8 nbrs)  │
+│                                                          │
+│   senses nearby chemistry   →   reads its 8 neighbours   │
+│   its chemistry reacts      →   applies 4 fixed rules    │
+│   lives / divides / dies    →   alive or dead            │
+│   (all cells, same moment)  →   whole grid updates       │
+│                                                          │
+│  footer: von Neumann 1948 → Conway 1970 → today          │
+└──────────────────────────────────────────────────────────┘
+```
+
+**1. What a cell is** (one line, ~20s spoken)
+- Smallest unit of life. A bacterium is ~1–2 µm — about 500 side by side
+  span a millimetre.
+- A membrane around chemistry plus genetic instructions.
+- *The thesis fact:* no brain, no nervous system. It reacts only to molecules
+  at its own surface — nutrients, toxins, signals from neighbours.
+
+**2. How a CA represents it** (the table is the centrepiece)
+
+| CA term | My code | The biology |
+|---|---|---|
+| State | 0 / 1 in the grid | alive / dead |
+| Neighbourhood | the 8 surrounding squares | what the cell can sense nearby |
+| Rule | the 4 Conway rules | its chemistry |
+| Time step | one `step()` call | one generation |
+
+Say aloud: it's a cartoon, not a simulation. What it keeps is the one constraint
+that matters — **local information only.**
+
+**3. The field** (footer + ~30s spoken; pick 2–3, not all)
+- **1940s — von Neumann & Ulam.** Can a machine build a copy of itself? On a
+  grid, von Neumann showed it needs instructions that are both *copied* and
+  *read* — before DNA's structure was discovered (1953), which turned out to
+  work that way.
+- **1970 — Conway's Game of Life.** Popularised by Martin Gardner in
+  *Scientific American*. Simplest rules that still produce surprising behaviour.
+- **1980s–2000s — Wolfram, Rule 110.** A 1-D automaton proven Turing-complete.
+  Use if making the "dumb rules can compute anything" point.
+- **2020 — Neural Cellular Automata** (Mordvintsev et al., *Distill*, "Growing
+  Neural Cellular Automata"). Learned rules grow a shape and regrow it when
+  damaged — like tissue regeneration. Best bridge back to biology; runs in a
+  browser.
+
+**Pitfalls.**
+- Too much text — if the slide reads without me, it's too dense. ≤8 words per
+  line, three lines plus the table.
+- Don't say "simulates cells." Say it *captures one constraint* of cells.
+- No thinking-verbs: not "decides / knows / wants" — use "reads / reacts /
+  applies." The thesis lives or dies on this.
+
+**To write (me):**
+- [ ] Title line
+- [ ] The three slide lines
+- [ ] Which 2–3 history points to keep
