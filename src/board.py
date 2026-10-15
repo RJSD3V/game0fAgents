@@ -48,26 +48,22 @@ class Board:
     def step(self):
         self.grid = next_board(grid = self.grid)
 
-def next_board(grid: np.ndarray):
-    def moore_nb(row,col,b):
-        # Sequence goes top,a nd moves anti-clockwise
-        n_count = 0
-        nbrs  = [(row-1,col), (row-1,col-1),(row,col-1), (row+1,col-1),(row+1,col),(row+1,col+1),(row,col+1),(row-1,col+1)]
-        for (ix,iy) in nbrs:
-            if 0<=ix < b.shape[0] and 0<= iy < b.shape[1]:
-                if b[ix][iy] == 1:
-                    n_count +=1
+def count_neighbors(grid: np.ndarray) -> np.ndarray:
+    neighbors = np.zeros_like(grid)
+    for dr in (-1, 0, 1):
+        for dc in (-1, 0, 1):
+            if dr == 0 and dc == 0:
+                continue
+            neighbors += np.roll(np.roll(grid, dr, axis=0), dc, axis=1)
+    return neighbors
 
-        return n_count
-    matrix = grid
-    moore_nb_vec = np.vectorize(moore_nb, excluded=[2])
-    neighbor_matrix = np.fromfunction(lambda x,y: moore_nb_vec(x,y,matrix),shape=matrix.shape, dtype=int)
-    birth_condition = (neighbor_matrix == 3)
-    survival_mask = (neighbor_matrix == 2) | (neighbor_matrix == 3)
-    next_board = np.zeros_like(matrix)
-    next_board[(matrix == 0) & birth_condition] = 1
-    next_board[(matrix==1) & survival_mask] = 1
-    return next_board
+
+
+def next_board(grid: np.ndarray) -> np.ndarray:
+    neighbors = count_neighbors(grid)
+    birth = (grid == 0) & (neighbors == 3)
+    survive = (grid == 1) & ((neighbors == 2) | (neighbors == 3))
+    return (birth | survive).astype(grid.dtype)
 
 
 def main():

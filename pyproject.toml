@@ -5,6 +5,11 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "clickhouse-connect>=1.9.0",
+    "langchain>=1.4.3",
+    "langchain-anthropic>=1.7.5",
+    "langfuse>=4.16.0",
+    "langgraph>=1.2.11",
     "langgraph-cli[inmem]>=0.4.31",
     "numpy>=2.5.3",
     "pygame>=2.6.1",
