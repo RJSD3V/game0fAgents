@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="Calibri, Segoe UI, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+    <marker id="arrGreen" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2ecc71"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="540" fill="#fafafa" rx="8"/>
+
+  <!-- Title -->
+  <text x="480" y="38" text-anchor="middle" fill="#222" font-size="22" font-weight="bold">The Symbiosis Engine</text>
+  <line x1="360" y1="48" x2="600" y2="48" stroke="#2ecc71" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- ═══ ROW 1: Simulation + Renderer ═══ -->
+
+  <!-- Simulation Core -->
+  <rect x="60" y="80" width="280" height="130" rx="12" fill="#fff" stroke="#3498db" stroke-width="2.5"/>
+  <rect x="60" y="80" width="280" height="36" rx="12" fill="#3498db"/>
+  <rect x="60" y="100" width="280" height="16" fill="#3498db"/>
+  <text x="200" y="104" text-anchor="middle" fill="#fff" font-size="15" font-weight="bold">Simulation Core</text>
+  <text x="85" y="140" fill="#333" font-size="13">Board — NumPy grid (60×80)</text>
+  <text x="85" y="162" fill="#666" font-size="12">Birth (3) · Survive (2-3) · Death</text>
+  <text x="85" y="184" fill="#3498db" font-size="11" font-style="italic">Cell division &amp; apoptosis</text>
+
+  <!-- Pygame Renderer -->
+  <rect x="400" y="80" width="240" height="130" rx="12" fill="#fff" stroke="#9b59b6" stroke-width="2.5"/>
+  <rect x="400" y="80" width="240" height="36" rx="12" fill="#9b59b6"/>
+  <rect x="400" y="100" width="240" height="16" fill="#9b59b6"/>
+  <text x="520" y="104" text-anchor="middle" fill="#fff" font-size="15" font-weight="bold">Pygame Renderer</text>
+  <text x="425" y="140" fill="#333" font-size="13">Real-time grid display</text>
+  <text x="425" y="162" fill="#666" font-size="12">HUD · AI flash · Buttons</text>
+  <text x="425" y="184" fill="#9b59b6" font-size="11" font-style="italic">15 FPS game loop</text>
+
+  <!-- Arrow: Simulation → Renderer -->
+  <line x1="340" y1="145" x2="395" y2="145" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="367" y="134" text-anchor="middle" fill="#888" font-size="10">render</text>
+
+  <!-- ═══ ROW 2: AI + Telemetry + Observability ═══ -->
+
+  <!-- Quorum Sensing AI -->
+  <rect x="60" y="270" width="240" height="150" rx="12" fill="#fff" stroke="#2ecc71" stroke-width="2.5"/>
+  <rect x="60" y="270" width="240" height="36" rx="12" fill="#2ecc71"/>
+  <rect x="60" y="290" width="240" height="16" fill="#2ecc71"/>
+  <text x="180" y="294" text-anchor="middle" fill="#fff" font-size="15" font-weight="bold">Quorum Sensing AI</text>
+  <text x="85" y="330" fill="#333" font-size="13">LangGraph + Claude</text>
+  <text x="85" y="355" fill="#2ecc71" font-size="12" font-weight="bold">BOOST · CULL · SPORULATE</text>
+  <text x="85" y="377" fill="#666" font-size="12">Every 50 epochs (async)</text>
+  <text x="85" y="399" fill="#2ecc71" font-size="11" font-style="italic">Autoinducer signaling</text>
+
+  <!-- ClickHouse -->
+  <rect x="360" y="270" width="240" height="150" rx="12" fill="#fff" stroke="#e74c3c" stroke-width="2.5"/>
+  <rect x="360" y="270" width="240" height="36" rx="12" fill="#e74c3c"/>
+  <rect x="360" y="290" width="240" height="16" fill="#e74c3c"/>
+  <text x="480" y="294" text-anchor="middle" fill="#fff" font-size="15" font-weight="bold">ClickHouse</text>
+  <text x="385" y="330" fill="#333" font-size="13">Time-series telemetry</text>
+  <text x="385" y="355" fill="#666" font-size="12">Density · Births · Deaths</text>
+  <text x="385" y="377" fill="#666" font-size="12">AI decisions &amp; reasoning</text>
+  <text x="385" y="399" fill="#e74c3c" font-size="11" font-style="italic">Colony memory</text>
+
+  <!-- Langfuse -->
+  <rect x="660" y="270" width="240" height="150" rx="12" fill="#fff" stroke="#f39c12" stroke-width="2.5"/>
+  <rect x="660" y="270" width="240" height="36" rx="12" fill="#f39c12"/>
+  <rect x="660" y="290" width="240" height="16" fill="#f39c12"/>
+  <text x="780" y="294" text-anchor="middle" fill="#fff" font-size="15" font-weight="bold">Langfuse</text>
+  <text x="685" y="330" fill="#333" font-size="13">LLM observability</text>
+  <text x="685" y="355" fill="#666" font-size="12">Traces · Latency · Cost</text>
+  <text x="685" y="377" fill="#666" font-size="12">@observe decorator</text>
+  <text x="685" y="399" fill="#f39c12" font-size="11" font-style="italic">Diagnostic dashboard</text>
+
+  <!-- ═══ CONNECTING ARROWS ═══ -->
+
+  <!-- Simulation → AI (summary, left side) -->
+  <line x1="120" y1="210" x2="120" y2="265" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="113" y="242" text-anchor="end" fill="#888" font-size="10">summary</text>
+  <!-- AI → Simulation (decision, right side) -->
+  <line x1="240" y1="270" x2="240" y2="215" stroke="#2ecc71" stroke-width="2.5" marker-end="url(#arrGreen)"/>
+  <text x="255" y="242" fill="#2ecc71" font-size="10" font-weight="bold">decision</text>
+
+  <!-- Simulation → ClickHouse -->
+  <path d="M 320 210 L 320 240 L 420 240 L 420 265" fill="none" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="370" y="230" text-anchor="middle" fill="#888" font-size="10">record()</text>
+
+  <!-- ClickHouse → AI (history feeds back) -->
+  <line x1="360" y1="370" x2="305" y2="370" stroke="#555" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <text x="333" y="359" text-anchor="middle" fill="#888" font-size="10">history</text>
+
+  <!-- AI → Langfuse (routed below the cards) -->
+  <path d="M 180 420 L 180 440 L 780 440 L 780 425" fill="none" stroke="#f39c12" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <text x="480" y="454" text-anchor="middle" fill="#f39c12" font-size="10">@observe traces</text>
+
+  <!-- Renderer box: Langfuse button (from right side) -->
+  <path d="M 640 145 L 780 145 L 780 265" fill="none" stroke="#f39c12" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <text x="710" y="134" fill="#f39c12" font-size="10">dashboard</text>
+
+  <!-- ═══ BOTTOM: Tech stack bar ═══ -->
+  <rect x="60" y="470" width="840" height="44" rx="8" fill="#f0f0f0"/>
+
+  <rect x="75" y="479" width="70" height="26" rx="5" fill="#3498db" opacity="0.15"/>
+  <text x="110" y="497" text-anchor="middle" fill="#3498db" font-size="12" font-weight="bold">NumPy</text>
+
+  <rect x="155" y="479" width="80" height="26" rx="5" fill="#9b59b6" opacity="0.15"/>
+  <text x="195" y="497" text-anchor="middle" fill="#9b59b6" font-size="12" font-weight="bold">Pygame</text>
+
+  <rect x="245" y="479" width="90" height="26" rx="5" fill="#2ecc71" opacity="0.15"/>
+  <text x="290" y="497" text-anchor="middle" fill="#2ecc71" font-size="12" font-weight="bold">LangGraph</text>
+
+  <rect x="345" y="479" width="70" height="26" rx="5" fill="#2ecc71" opacity="0.15"/>
+  <text x="380" y="497" text-anchor="middle" fill="#2ecc71" font-size="12" font-weight="bold">Claude</text>
+
+  <rect x="425" y="479" width="100" height="26" rx="5" fill="#e74c3c" opacity="0.15"/>
+  <text x="475" y="497" text-anchor="middle" fill="#e74c3c" font-size="12" font-weight="bold">ClickHouse</text>
+
+  <rect x="535" y="479" width="85" height="26" rx="5" fill="#f39c12" opacity="0.15"/>
+  <text x="577" y="497" text-anchor="middle" fill="#f39c12" font-size="12" font-weight="bold">Langfuse</text>
+
+  <rect x="630" y="479" width="70" height="26" rx="5" fill="#888" opacity="0.12"/>
+  <text x="665" y="497" text-anchor="middle" fill="#666" font-size="12" font-weight="bold">Docker</text>
+
+  <rect x="710" y="479" width="75" height="26" rx="5" fill="#888" opacity="0.12"/>
+  <text x="747" y="497" text-anchor="middle" fill="#666" font-size="12" font-weight="bold">Python</text>
+
+  <rect x="795" y="479" width="90" height="26" rx="5" fill="#888" opacity="0.12"/>
+  <text x="840" y="497" text-anchor="middle" fill="#666" font-size="12" font-weight="bold">Pydantic</text>
+</svg>
