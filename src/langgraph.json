@@ -1,6 +1,6 @@
 {
   "dependencies": ["."],
   "graphs": {
-    "my_agent": "./workflow.py:graph"
+    "quorum_sensing": "./workflow.py:graph"
   }
 }

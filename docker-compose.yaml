@@ -149,8 +149,8 @@ services:
       LANGFUSE_INIT_PROJECT_NAME: Symbiosis Engine
       LANGFUSE_INIT_PROJECT_PUBLIC_KEY: pk-lf-symbiosis-local
       LANGFUSE_INIT_PROJECT_SECRET_KEY: sk-lf-symbiosis-local
-      LANGFUSE_INIT_USER_EMAIL: rjsode25@gmail.com
-      LANGFUSE_INIT_USER_NAME: rjsode
+      LANGFUSE_INIT_USER_EMAIL: admin@symbiosis.local
+      LANGFUSE_INIT_USER_NAME: admin
       LANGFUSE_INIT_USER_PASSWORD: symbiosis
 
 volumes:
