@@ -2,6 +2,8 @@
 
 **A living simulation where an AI controls the weather, not the cells.**
 
+🎤 **Built in two months to a hard deadline and presented at [AWS Community Day Mumbai](https://lnkd.in/p/d_WDRP4A) on 17 October 2026.**
+
 ![The Symbiosis Engine running: a colony of cells at epoch 2,050, with the AI's latest decision shown in the corner](docs/images/app-window.png)
 
 <!-- demo video -->
@@ -10,7 +12,8 @@
 
 - **What it is:** a colony of cells running Conway's Game of Life, plus an AI agent (Claude, orchestrated with LangGraph) that checks on the colony every 50 generations and decides whether to feed it, cull it, or leave it alone.
 - **The question:** can an AI that sees the whole board govern a colony better than a few simple rules?
-- **The answer:** it did about as well as an `if` statement, and it was the only part of the system that made mistakes. I measured that, traced why, and presented it at **AWS Community Day Mumbai (October 2026)**.
+- **The answer:** it did about as well as an `if` statement, and it was the only part of the system that made mistakes. I measured that, traced why, and presented the result on stage.
+- **The timeline:** from first commit (17 August 2026) to a live talk ([AWS Community Day Mumbai](https://lnkd.in/p/d_WDRP4A), 17 October 2026) in two months. The physics, AI agent, observability stack, experiment and slides all had to be ready by then.
 - **Built with:** Python · NumPy · pygame · LangGraph · Claude · ClickHouse · Langfuse · Docker · pytest
 
 ---
@@ -160,4 +163,4 @@ The files are small. Read them in this order:
 
 ---
 
-Built by [RJSD3V](https://github.com/RJSD3V) while learning Python, AI engineering and cell biology at the same time.
+Built by [RJSD3V](https://github.com/RJSD3V) while learning Python, AI engineering and cell biology at the same time, and presented at [AWS Community Day Mumbai](https://lnkd.in/p/d_WDRP4A), October 2026.
