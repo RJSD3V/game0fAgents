@@ -59,6 +59,12 @@ See [MASTER.md](MASTER.md) (architecture) and [REFERENCE.md](REFERENCE.md)
 | [src/models.py](src/models.py) | Pydantic schemas — the cleanest file in the repo |
 | [src/workflow.py](src/workflow.py) | empty; `langgraph.json` already points at `:graph` in it |
 | [src/notebooks/game.ipynb](src/notebooks/game.ipynb) | the real lab notebook — where the numpy learning happened |
+| [src/interventions.py](src/interventions.py), [src/experiments.py](src/experiments.py) | **Written by Claude at RJ's explicit request (2026-11-27, portfolio push)** — contract override. Good study material: ask RJ to explain them back. |
+
+**Update 2026-11-27:** threads 3 (vectorization) and 6 (testing) are largely done
+by RJ — `np.roll` neighbour count, 27 tests. Still open and RJ's to fix: the
+JSON parse failure in `workflow.py` (prose before JSON silently becomes
+HOMEOSTASIS — point at `with_structured_output`), packaging (7), DI (8), ruff (9).
 | config/docker_compose.yaml | ClickHouse provisioning |
 
 No `__init__.py`. `app.py` does `from board import ...`, so it only runs from

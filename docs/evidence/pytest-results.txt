@@ -1,0 +1,37 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.5, pytest-9.1.1, pluggy-1.7.0 -- ~/dev/game0fAgents/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: ~/dev/game0fAgents
+configfile: pyproject.toml
+plugins: anyio-4.14.2, langsmith-0.11.2
+collecting ... collected 27 items
+
+tests/test_board.py::test_transposition PASSED                           [  3%]
+tests/test_board.py::test_alive PASSED                                   [  7%]
+tests/test_board.py::test_negative_index PASSED                          [ 11%]
+tests/test_board.py::test_block_still_life PASSED                        [ 14%]
+tests/test_board.py::test_blinker_period_2 PASSED                        [ 18%]
+tests/test_board.py::test_empty_board_stays_empty PASSED                 [ 22%]
+tests/test_board.py::test_lone_cell_dies PASSED                          [ 25%]
+tests/test_board.py::test_neighbor_count PASSED                          [ 29%]
+tests/test_board.py::test_step_returns_correct_shape PASSED              [ 33%]
+tests/test_experiments.py::test_threshold_policy_matches_the_prompt[0.0-SPORULATION] PASSED [ 37%]
+tests/test_experiments.py::test_threshold_policy_matches_the_prompt[0.019-SPORULATION] PASSED [ 40%]
+tests/test_experiments.py::test_threshold_policy_matches_the_prompt[0.02-NUTRIENT_BOOST] PASSED [ 44%]
+tests/test_experiments.py::test_threshold_policy_matches_the_prompt[0.049-NUTRIENT_BOOST] PASSED [ 48%]
+tests/test_experiments.py::test_threshold_policy_matches_the_prompt[0.05-HOMEOSTASIS] PASSED [ 51%]
+tests/test_experiments.py::test_threshold_policy_matches_the_prompt[0.4-HOMEOSTASIS] PASSED [ 55%]
+tests/test_experiments.py::test_threshold_policy_matches_the_prompt[0.401-PHAGE_CULL] PASSED [ 59%]
+tests/test_experiments.py::test_same_seed_gives_the_same_colony PASSED   [ 62%]
+tests/test_experiments.py::test_no_ai_policy_is_pure_physics PASSED      [ 66%]
+tests/test_experiments.py::test_withdrawal_matches_threshold_until_help_stops PASSED [ 70%]
+tests/test_interventions.py::test_nutrient_boost_revives_exactly_n_dead_cells PASSED [ 74%]
+tests/test_interventions.py::test_nutrient_boost_on_full_board_does_nothing PASSED [ 77%]
+tests/test_interventions.py::test_phage_cull_kills_only_inside_its_square PASSED [ 81%]
+tests/test_interventions.py::test_phage_cull_on_empty_board_does_nothing PASSED [ 85%]
+tests/test_interventions.py::test_sporulation_reports_the_cells_it_created PASSED [ 88%]
+tests/test_interventions.py::test_non_events_leave_the_board_alone[HOMEOSTASIS] PASSED [ 92%]
+tests/test_interventions.py::test_non_events_leave_the_board_alone[NOT_A_DECISION] PASSED [ 96%]
+tests/test_interventions.py::test_non_events_leave_the_board_alone[] PASSED [100%]
+
+============================== 27 passed in 0.31s ==============================

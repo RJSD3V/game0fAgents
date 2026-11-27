@@ -9,21 +9,20 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 import pygame
-import numpy as np
 
-from board import Board, next_board
+import interventions
+from board import Board
 from telemetry import Telemetry
 from workflow import graph
 
 
 # ── Display settings ──────────────────────────────────────────────
-CELL_SIZE = 20
+MAX_CELL_SIZE = 20
+MIN_CELL_SIZE = 4
 BOARD_ROWS = 60
 BOARD_COLS = 80
-WINDOW_W = BOARD_COLS * CELL_SIZE
-GRID_H = BOARD_ROWS * CELL_SIZE
 BAR_H = 50
-WINDOW_H = GRID_H + BAR_H
+SCREEN_FILL = 0.85    # leave room for the menu bar, dock and title bar
 FPS = 15
 
 # ── Colour palette ────────────────────────────────────────────────
@@ -39,16 +38,21 @@ BTN_TEXT  = (200, 220, 255)
 BAR_BG    = (15, 15, 25)
 
 # ── AI settings ───────────────────────────────────────────────────
-AI_INTERVAL = 50
-BOOST_CELLS = 40
-CULL_RADIUS = 8
-SPORULATION_CELLS = 80
+AI_INTERVAL = 50    # intervention sizes live in interventions.py
 
 
 class Engine:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((WINDOW_W, WINDOW_H))
+        # Size cells to the display so the window (and its button bar) fits
+        # a laptop or a 720p projector alike.
+        info = pygame.display.Info()
+        fit_w = int(info.current_w * SCREEN_FILL) // BOARD_COLS
+        fit_h = (int(info.current_h * SCREEN_FILL) - BAR_H) // BOARD_ROWS
+        self.cell_size = max(MIN_CELL_SIZE, min(MAX_CELL_SIZE, fit_w, fit_h))
+        self.window_w = BOARD_COLS * self.cell_size
+        self.grid_h = BOARD_ROWS * self.cell_size
+        self.screen = pygame.display.set_mode((self.window_w, self.grid_h + BAR_H))
         pygame.display.set_caption("The Symbiosis Engine")
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont("Consolas", 18)
@@ -62,18 +66,23 @@ class Engine:
 
         self.ai_decision = ""
         self.ai_reasoning = ""
+        # A decision is an event: logged on the one epoch it lands, then cleared.
+        # ai_decision/ai_reasoning above stay set for the HUD.
+        self.pending_event: tuple[str, str] | None = None
         self.ai_flash_timer = 0
         self.ai_running = False
         self.highlight_cells: list[tuple[int, int]] = []
         self.highlight_color = BIRTH_CLR
         self.highlight_timer = 0
         self.paused = False
+        self.step_requested = False
 
         self.btn_font = pygame.font.SysFont("Consolas", 18, bold=True)
-        btn_w, btn_h = 180, 36
-        btn_y = GRID_H + (BAR_H - btn_h) // 2
+        btn_w, btn_h = 150, 36
+        btn_y = self.grid_h + (BAR_H - btn_h) // 2
         self.btn_pause = pygame.Rect(10, btn_y, btn_w, btn_h)
-        self.btn_langfuse = pygame.Rect(200, btn_y, btn_w, btn_h)
+        self.btn_step = pygame.Rect(170, btn_y, btn_w, btn_h)
+        self.btn_langfuse = pygame.Rect(330, btn_y, btn_w, btn_h)
 
     def _connect_telemetry(self) -> Telemetry | None:
         try:
@@ -106,33 +115,47 @@ class Engine:
                 if event.key == pygame.K_SPACE:
                     self.paused = not self.paused
                     print(f"[engine] {'Paused' if self.paused else 'Resumed'}")
+                if event.key in (pygame.K_RIGHT, pygame.K_n):
+                    self._request_step()
                 if event.key == pygame.K_r:
                     self.board = Board.from_size(BOARD_ROWS, BOARD_COLS)
                     self.board.seed_random(300)
                     self.epoch = 0
+                    self.pending_event = None
                     if self.telemetry:
                         self.telemetry.clear()
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if self.btn_pause.collidepoint(event.pos):
                     self.paused = not self.paused
                     print(f"[engine] {'Paused' if self.paused else 'Resumed'}")
+                elif self.btn_step.collidepoint(event.pos):
+                    self._request_step()
                 elif self.btn_langfuse.collidepoint(event.pos):
                     webbrowser.open("http://localhost:3000")
                     print("[engine] Opened Langfuse dashboard")
         return True
 
+    def _request_step(self):
+        """Advance exactly one generation; pauses first so the step is visible."""
+        self.paused = True
+        self.step_requested = True
+
     def _update(self):
-        if self.paused:
+        if self.paused and not self.step_requested:
             return
+        self.step_requested = False
         self.board.step()
         self.epoch += 1
+
+        event, self.pending_event = self.pending_event, None
+        decision, reasoning = event or ("", "")
 
         if self.telemetry:
             try:
                 self.telemetry.record(
                     self.board.grid,
-                    ai_decision=self.ai_decision,
-                    ai_reasoning=self.ai_reasoning,
+                    ai_decision=decision,
+                    ai_reasoning=reasoning,
                 )
             except Exception as e:
                 print(f"[telemetry] Record failed: {e}")
@@ -183,6 +206,7 @@ class Engine:
                 self.ai_reasoning = result.get("reasoning", "")
                 print(f"[ai] Epoch {self.epoch} → {self.ai_decision}: {self.ai_reasoning}")
                 self._apply_decision(self.ai_decision)
+                self.pending_event = (self.ai_decision, self.ai_reasoning)
                 self.ai_flash_timer = FPS * 3
             except Exception as e:
                 self.ai_decision = "ERROR"
@@ -197,39 +221,10 @@ class Engine:
         thread.start()
 
     def _apply_decision(self, decision: str):
-        grid = self.board.grid
-        if decision == "NUTRIENT_BOOST":
-            dead_cells = list(zip(*np.where(grid == 0)))
-            if dead_cells:
-                count = min(BOOST_CELLS, len(dead_cells))
-                indices = np.random.choice(len(dead_cells), count, replace=False)
-                placed = []
-                for i in indices:
-                    r, c = dead_cells[i]
-                    grid[r, c] = 1
-                    placed.append((r, c))
-                self.highlight_cells = placed
-                self.highlight_color = BIRTH_CLR
-                self.highlight_timer = FPS * 2
-
-        elif decision == "PHAGE_CULL":
-            alive_positions = list(zip(*np.where(grid == 1)))
-            if alive_positions:
-                center_idx = np.random.randint(len(alive_positions))
-                cr, cc = alive_positions[center_idx]
-                culled = []
-                for r in range(max(0, cr - CULL_RADIUS), min(BOARD_ROWS, cr + CULL_RADIUS)):
-                    for c in range(max(0, cc - CULL_RADIUS), min(BOARD_COLS, cc + CULL_RADIUS)):
-                        if grid[r, c] == 1:
-                            grid[r, c] = 0
-                            culled.append((r, c))
-                self.highlight_cells = culled
-                self.highlight_color = CULL_CLR
-                self.highlight_timer = FPS * 2
-
-        elif decision == "SPORULATION":
-            self.board.seed_random(SPORULATION_CELLS)
-            self.highlight_color = BIRTH_CLR
+        changed = interventions.apply(decision, self.board)
+        if changed:
+            self.highlight_cells = changed
+            self.highlight_color = CULL_CLR if decision == "PHAGE_CULL" else BIRTH_CLR
             self.highlight_timer = FPS * 2
 
     # ── Rendering ─────────────────────────────────────────────────
@@ -246,7 +241,8 @@ class Engine:
             for col in range(BOARD_COLS):
                 if self.board.is_alive(row, col):
                     color = self.highlight_color if (row, col) in highlight_set else CELL_CLR
-                    rect = pygame.Rect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+                    size = self.cell_size
+                    rect = pygame.Rect(col * size, row * size, size, size)
                     pygame.draw.rect(self.screen, color, rect)
 
     def _draw_hud(self):
@@ -280,17 +276,19 @@ class Engine:
             flash_surface = self.big_font.render(
                 f"QUORUM: {self.ai_decision}", True, self.highlight_color
             )
-            x = WINDOW_W // 2 - flash_surface.get_width() // 2
-            self.screen.blit(flash_surface, (x, GRID_H - 40))
+            x = self.window_w // 2 - flash_surface.get_width() // 2
+            self.screen.blit(flash_surface, (x, self.grid_h - 40))
 
     def _draw_buttons(self):
-        pygame.draw.rect(self.screen, BAR_BG, (0, GRID_H, WINDOW_W, BAR_H))
+        pygame.draw.rect(self.screen, BAR_BG, (0, self.grid_h, self.window_w, BAR_H))
 
         mouse_pos = pygame.mouse.get_pos()
 
         for btn, label in [
-            (self.btn_pause, "▶ PLAY" if self.paused else "⏸ PAUSE"),
-            (self.btn_langfuse, "🔍 LANGFUSE"),
+            # Plain ASCII: the fallback font on macOS has no glyphs for ▶ ⏸ 🔍
+            (self.btn_pause, "PLAY" if self.paused else "PAUSE"),
+            (self.btn_step, "STEP >"),
+            (self.btn_langfuse, "LANGFUSE"),
         ]:
             hover = btn.collidepoint(mouse_pos)
             color = BTN_HOVER if hover else BTN_BG

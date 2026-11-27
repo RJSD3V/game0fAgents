@@ -38,8 +38,12 @@ class QuorumState(TypedDict):
 
 @observe(name="quorum_sensing")
 def analyze_colony(state: QuorumState) -> QuorumState:
+    # Fail fast on a hung network (calls normally take 2-5 s); the engine
+    # shows ERROR and retries at the next 50-epoch checkpoint.
     llm = ChatAnthropic(
-        model="claude-sonnet-5-5"
+        model="claude-sonnet-5-5",
+        timeout=15,
+        max_retries=1,
     )
 
     prompt = (
