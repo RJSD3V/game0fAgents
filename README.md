@@ -2,31 +2,14 @@
 
 **A living simulation where an AI controls the weather, not the cells.**
 
-🎤 **Built in two months to a hard deadline and presented at AWS Community Day Mumbai on 17 October 2026** as *"Code, Cells, & Chaos: Directing Metabolic Evolution with AI Signaling Layers"* ([event post](https://lnkd.in/p/d_WDRP4A)).
-
-
-## Demo
-
-
-
-
-
 ## In 30 seconds
 
 - **What it is:** a colony of cells running Conway's Game of Life, plus an AI agent (Claude, orchestrated with LangGraph) that checks on the colony every 50 generations and decides whether to feed it, cull it, or leave it alone.
 - **The question:** can an AI that sees the whole board govern a colony better than a few simple rules?
-- **The answer:** it did about as well as an `if` statement, and it was the only part of the system that made mistakes. I measured that, traced why, and presented the result on stage.
-- **The timeline:** from first commit (17 August 2026) to a live talk ([AWS Community Day Mumbai](https://lnkd.in/p/d_WDRP4A), 17 October 2026) in two months. The physics, AI agent, observability stack, experiment and slides all had to be ready by then.
+- **The answer:** it did about as well as an `if` statement, and it was the only part of the system that made mistakes. I measured that with a reproducible experiment and traced why it happened.
 - **Built with:** Python · NumPy · pygame · LangGraph · Claude · ClickHouse · Langfuse · Docker · pytest
 
-
 ![The Symbiosis Engine running: a colony of cells at epoch 2,050, with the AI's latest decision shown in the corner](docs/images/app-window.png)
-
-### On stage
-
-<a href="https://lnkd.in/p/d_WDRP4A"><img src="docs/images/talk-aws-community-day.jpg" width="420" alt="Presenting 'Code, Cells, &amp; Chaos' at AWS Community Day Mumbai 2026, in front of a slide on quorum sensing and the Hawaiian bobtail squid"></a>
-
-*Presenting the project at AWS Community Day Mumbai 2026, in front of the quorum-sensing slide with the Hawaiian bobtail squid. Photo: [AWS User Group Mumbai](https://lnkd.in/p/d_WDRP4A).*
 
 ---
 
@@ -175,4 +158,16 @@ The files are small. Read them in this order:
 
 ---
 
-Built by **Raajas Sode** ([RJSD3V](https://github.com/RJSD3V)) while learning Python, AI engineering and cell biology at the same time, and presented at [AWS Community Day Mumbai](https://lnkd.in/p/d_WDRP4A), October 2026.
+## The talk
+
+The project was built in two months to a fixed deadline. It went from first commit on 17 August 2026 to a live session at **AWS Community Day Mumbai on 17 October 2026**, and the physics, AI agent, observability stack, experiment and slides all had to be ready by then.
+
+The session was called *"Code, Cells, & Chaos: Directing Metabolic Evolution with AI Signaling Layers"* ([event post](https://lnkd.in/p/d_WDRP4A)).
+
+<a href="https://lnkd.in/p/d_WDRP4A"><img src="docs/images/talk-aws-community-day.jpg" width="420" alt="Presenting 'Code, Cells, &amp; Chaos' at AWS Community Day Mumbai 2026, in front of a slide on quorum sensing and the Hawaiian bobtail squid"></a>
+
+*Presenting the quorum-sensing slide, with the Hawaiian bobtail squid. Photo: [AWS User Group Mumbai](https://lnkd.in/p/d_WDRP4A).*
+
+---
+
+Built by **Raajas Sode** ([RJSD3V](https://github.com/RJSD3V)) while learning Python, AI engineering and cell biology at the same time.
