@@ -2,7 +2,7 @@
 
 **A living simulation where an AI controls the weather, not the cells.**
 
-🎤 **Built in two months to a hard deadline and presented at [AWS Community Day Mumbai](https://lnkd.in/p/d_WDRP4A) on 17 October 2026.**
+🎤 **Built in two months to a hard deadline and presented at AWS Community Day Mumbai on 17 October 2026** as *"Code, Cells, & Chaos: Directing Metabolic Evolution with AI Signaling Layers"* ([event post](https://lnkd.in/p/d_WDRP4A)).
 
 ![The Symbiosis Engine running: a colony of cells at epoch 2,050, with the AI's latest decision shown in the corner](docs/images/app-window.png)
 
@@ -15,6 +15,12 @@
 - **The answer:** it did about as well as an `if` statement, and it was the only part of the system that made mistakes. I measured that, traced why, and presented the result on stage.
 - **The timeline:** from first commit (17 August 2026) to a live talk ([AWS Community Day Mumbai](https://lnkd.in/p/d_WDRP4A), 17 October 2026) in two months. The physics, AI agent, observability stack, experiment and slides all had to be ready by then.
 - **Built with:** Python · NumPy · pygame · LangGraph · Claude · ClickHouse · Langfuse · Docker · pytest
+
+### On stage
+
+<a href="https://lnkd.in/p/d_WDRP4A"><img src="docs/images/talk-aws-community-day.jpg" width="420" alt="Presenting 'Code, Cells, &amp; Chaos' at AWS Community Day Mumbai 2026, in front of a slide on quorum sensing and the Hawaiian bobtail squid"></a>
+
+*Presenting the project at AWS Community Day Mumbai 2026, in front of the quorum-sensing slide with the Hawaiian bobtail squid. Photo: [AWS User Group Mumbai](https://lnkd.in/p/d_WDRP4A).*
 
 ---
 
