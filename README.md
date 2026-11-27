@@ -4,15 +4,11 @@
 
 🎤 **Built in two months to a hard deadline and presented at AWS Community Day Mumbai on 17 October 2026** as *"Code, Cells, & Chaos: Directing Metabolic Evolution with AI Signaling Layers"* ([event post](https://lnkd.in/p/d_WDRP4A)).
 
-![The Symbiosis Engine running: a colony of cells at epoch 2,050, with the AI's latest decision shown in the corner](docs/images/app-window.png)
 
 ## Demo
 
-<!--
-  VIDEO GOES HERE
-  On github.com: edit README.md, click on the blank line below this comment,
-  drag the .mp4 into the editor, wait for the upload link to appear, then commit.
--->
+
+
 
 
 ## In 30 seconds
@@ -22,6 +18,9 @@
 - **The answer:** it did about as well as an `if` statement, and it was the only part of the system that made mistakes. I measured that, traced why, and presented the result on stage.
 - **The timeline:** from first commit (17 August 2026) to a live talk ([AWS Community Day Mumbai](https://lnkd.in/p/d_WDRP4A), 17 October 2026) in two months. The physics, AI agent, observability stack, experiment and slides all had to be ready by then.
 - **Built with:** Python · NumPy · pygame · LangGraph · Claude · ClickHouse · Langfuse · Docker · pytest
+
+
+![The Symbiosis Engine running: a colony of cells at epoch 2,050, with the AI's latest decision shown in the corner](docs/images/app-window.png)
 
 ### On stage
 
