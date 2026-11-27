@@ -1,0 +1,33 @@
+{
+  "config": {
+    "runs": 30,
+    "generations": 10448,
+    "burn_in": 1000,
+    "stop_at": 5000,
+    "board": "60x80",
+    "seed_cells": 300,
+    "interval": 50
+  },
+  "results": {
+    "no_ai": {
+      "median": 0.77,
+      "p25": 0.42,
+      "p75": 1.21
+    },
+    "threshold": {
+      "median": 5.79,
+      "p25": 5.54,
+      "p75": 5.99
+    },
+    "withdrawal_during_help": {
+      "median": 5.72,
+      "p25": 5.44,
+      "p75": 6.07
+    },
+    "withdrawal_last_1000": {
+      "median": 2.8,
+      "p25": 2.21,
+      "p75": 3.24
+    }
+  }
+}
