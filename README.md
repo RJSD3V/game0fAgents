@@ -6,7 +6,14 @@
 
 ![The Symbiosis Engine running: a colony of cells at epoch 2,050, with the AI's latest decision shown in the corner](docs/images/app-window.png)
 
-<!-- demo video -->
+## Demo
+
+<!--
+  VIDEO GOES HERE
+  On github.com: edit README.md, click on the blank line below this comment,
+  drag the .mp4 into the editor, wait for the upload link to appear, then commit.
+-->
+
 
 ## In 30 seconds
 
