@@ -9,11 +9,13 @@
 - **The answer:** it did about as well as an `if` statement, and it was the only part of the system that made mistakes. I measured that with a reproducible experiment and traced why it happened.
 - **Built with:** Python · NumPy · pygame · LangGraph · Claude · ClickHouse · Langfuse · Docker · pytest
 
-![The Symbiosis Engine running: a colony of cells at epoch 2,050, with the AI's latest decision shown in the corner](docs/images/app-window.png)
-
 ---
 
 ## The tour
+
+This is the engine running. The blue squares are living cells, and the panel in the top-left corner shows the generation, the colony's population and the AI's latest decision with its reasoning. The buttons along the bottom pause the simulation, step it one generation at a time, and open the AI trace dashboard.
+
+![The Symbiosis Engine running: a colony of cells at epoch 2,050, with the AI's latest decision shown in the corner](docs/images/app-window.png)
 
 ### 1. The cells follow four simple rules
 
