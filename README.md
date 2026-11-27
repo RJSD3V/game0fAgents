@@ -176,4 +176,4 @@ The files are small. Read them in this order:
 
 ---
 
-Built by [RJSD3V](https://github.com/RJSD3V) while learning Python, AI engineering and cell biology at the same time, and presented at [AWS Community Day Mumbai](https://lnkd.in/p/d_WDRP4A), October 2026.
+Built by **Raajas Sode** ([RJSD3V](https://github.com/RJSD3V)) while learning Python, AI engineering and cell biology at the same time, and presented at [AWS Community Day Mumbai](https://lnkd.in/p/d_WDRP4A), October 2026.
