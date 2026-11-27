@@ -9,9 +9,9 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 import pygame
-import numpy as np
 
-from board import Board, next_board
+import interventions
+from board import Board
 from telemetry import Telemetry
 from workflow import graph
 
@@ -38,10 +38,7 @@ BTN_TEXT  = (200, 220, 255)
 BAR_BG    = (15, 15, 25)
 
 # ── AI settings ───────────────────────────────────────────────────
-AI_INTERVAL = 50
-BOOST_CELLS = 40
-CULL_RADIUS = 8
-SPORULATION_CELLS = 80
+AI_INTERVAL = 50    # intervention sizes live in interventions.py
 
 
 class Engine:
@@ -224,39 +221,10 @@ class Engine:
         thread.start()
 
     def _apply_decision(self, decision: str):
-        grid = self.board.grid
-        if decision == "NUTRIENT_BOOST":
-            dead_cells = list(zip(*np.where(grid == 0)))
-            if dead_cells:
-                count = min(BOOST_CELLS, len(dead_cells))
-                indices = np.random.choice(len(dead_cells), count, replace=False)
-                placed = []
-                for i in indices:
-                    r, c = dead_cells[i]
-                    grid[r, c] = 1
-                    placed.append((r, c))
-                self.highlight_cells = placed
-                self.highlight_color = BIRTH_CLR
-                self.highlight_timer = FPS * 2
-
-        elif decision == "PHAGE_CULL":
-            alive_positions = list(zip(*np.where(grid == 1)))
-            if alive_positions:
-                center_idx = np.random.randint(len(alive_positions))
-                cr, cc = alive_positions[center_idx]
-                culled = []
-                for r in range(max(0, cr - CULL_RADIUS), min(BOARD_ROWS, cr + CULL_RADIUS)):
-                    for c in range(max(0, cc - CULL_RADIUS), min(BOARD_COLS, cc + CULL_RADIUS)):
-                        if grid[r, c] == 1:
-                            grid[r, c] = 0
-                            culled.append((r, c))
-                self.highlight_cells = culled
-                self.highlight_color = CULL_CLR
-                self.highlight_timer = FPS * 2
-
-        elif decision == "SPORULATION":
-            self.board.seed_random(SPORULATION_CELLS)
-            self.highlight_color = BIRTH_CLR
+        changed = interventions.apply(decision, self.board)
+        if changed:
+            self.highlight_cells = changed
+            self.highlight_color = CULL_CLR if decision == "PHAGE_CULL" else BIRTH_CLR
             self.highlight_timer = FPS * 2
 
     # ── Rendering ─────────────────────────────────────────────────
